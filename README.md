@@ -1,0 +1,1 @@
+# predicate-device-intel
