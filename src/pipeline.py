@@ -338,13 +338,203 @@ def extract_510k_intelligence(k_number: str, api_key: str = None, use_demo: bool
 
 
 def compare_predicates(k_numbers: list, api_key: str = None, use_demo: bool = True) -> dict:
-    if use_demo or not api_key:
-        return DEMO_COMPARISON
-    # Live path would aggregate extracted intelligence and call comparison prompt
-    return DEMO_COMPARISON
+    DEVICE_META = {
+        "K221847": {"name": "THERMOCOOL SMARTTOUCH SF-5D", "type": "ablation", "energy": "RF", "indication": "PAF", "has_cf": True, "has_software": False, "review_days": 166},
+        "K213291": {"name": "FARAPULSE PFA System", "type": "ablation_system", "energy": "PFA", "indication": "Persistent AF", "has_cf": False, "has_software": True, "review_days": 162},
+        "K192516": {"name": "THERMOCOOL SMARTTOUCH SF", "type": "ablation", "energy": "RF", "indication": "PAF + Persistent AF", "has_cf": True, "has_software": False, "review_days": 145},
+        "K201823": {"name": "RHYTHMIA HDx Mapping System", "type": "mapping_system", "energy": "Diagnostic", "indication": "Arrhythmia Mapping", "has_cf": False, "has_software": True, "review_days": 171},
+        "K183021": {"name": "ADVISOR HD Grid Catheter", "type": "diagnostic", "energy": "Diagnostic", "indication": "EP Mapping", "has_cf": False, "has_software": False, "review_days": 141},
+    }
+    ALL_TARGETS = [
+        {"parameter": "Contact force accuracy", "minimum_threshold": "+-2g", "recommended_target": "+-1g", "source_k_number": "K221847", "risk_if_missed": "High — FDA compares directly to BSW predicate"},
+        {"parameter": "RF power output accuracy", "minimum_threshold": "+-10%", "recommended_target": "+-5%", "source_k_number": "K221847", "risk_if_missed": "Medium — affects lesion reproducibility"},
+        {"parameter": "Tip pull strength", "minimum_threshold": ">8N", "recommended_target": ">10N", "source_k_number": "K221847", "risk_if_missed": "High — structural integrity critical"},
+        {"parameter": "PFA pulse energy accuracy", "minimum_threshold": "+-5%", "recommended_target": "+-3%", "source_k_number": "K213291", "risk_if_missed": "High — critical PFA safety parameter"},
+        {"parameter": "Transmural lesion rate ex vivo", "minimum_threshold": ">90%", "recommended_target": ">95%", "source_k_number": "K213291", "risk_if_missed": "High — FDA scrutinizes lesion quality for PFA"},
+        {"parameter": "Mapping position accuracy", "minimum_threshold": "<1mm RMS", "recommended_target": "<0.5mm RMS", "source_k_number": "K201823", "risk_if_missed": "High — primary performance claim for mapping system"},
+        {"parameter": "Signal SNR mapping channels", "minimum_threshold": ">30dB", "recommended_target": ">40dB", "source_k_number": "K201823", "risk_if_missed": "Medium — affects annotation accuracy"},
+        {"parameter": "Omnipolar signal accuracy", "minimum_threshold": "Within 15% of unipolar", "recommended_target": "Within 10%", "source_k_number": "K183021", "risk_if_missed": "Medium — key differentiator for omnipolar claim"},
+        {"parameter": "Grid mechanical integrity", "minimum_threshold": ">500 cycles", "recommended_target": ">1000 cycles", "source_k_number": "K183021", "risk_if_missed": "Medium — structural durability for flexible grid"},
+        {"parameter": "Sterility assurance level", "minimum_threshold": "SAL 10e-6", "recommended_target": "SAL 10e-6", "source_k_number": "All", "risk_if_missed": "Critical — non-negotiable regulatory requirement"},
+        {"parameter": "Biocompatibility ISO 10993-1", "minimum_threshold": "Pass all endpoints", "recommended_target": "Pass all endpoints incl. hemolysis", "source_k_number": "All", "risk_if_missed": "Critical — failure blocks clearance"},
+    ]
+    ALL_TESTS = [
+        {"priority": 1, "test": "Biocompatibility (ISO 10993-1)", "standard": "ISO 10993-1", "rationale": "Non-negotiable; 12-week lead time. Start first.", "estimated_weeks": 12, "sources": ["K221847","K213291","K192516","K201823","K183021"]},
+        {"priority": 2, "test": "Sterilization validation (EO)", "standard": "ISO 11135", "rationale": "Required; 10-14 week validation.", "estimated_weeks": 12, "sources": ["K221847","K213291","K192516","K183021"]},
+        {"priority": 3, "test": "Electrical safety RF generator", "standard": "IEC 60601-2-2", "rationale": "Critical for RF energy delivery.", "estimated_weeks": 4, "sources": ["K221847","K192516"]},
+        {"priority": 3, "test": "PFA pulse delivery accuracy", "standard": "IEC 60601-1", "rationale": "Critical safety for pulsed field energy.", "estimated_weeks": 5, "sources": ["K213291"]},
+        {"priority": 4, "test": "Contact force accuracy", "standard": "Internal BSW benchmark", "rationale": "Must meet or exceed +/-1g predicate benchmark.", "estimated_weeks": 3, "sources": ["K221847","K192516"]},
+        {"priority": 5, "test": "Tensile strength tip/shaft junction", "standard": "ASTM F2602", "rationale": "Structural integrity >10N target.", "estimated_weeks": 2, "sources": ["K221847","K192516"]},
+        {"priority": 5, "test": "Mapping position accuracy", "standard": "Internal cardiac phantom", "rationale": "<0.5mm RMS based on K201823 benchmark.", "estimated_weeks": 4, "sources": ["K201823"]},
+        {"priority": 6, "test": "Grid mechanical integrity 1000 cycles", "standard": "Internal", "rationale": "Structural durability for flexible array.", "estimated_weeks": 3, "sources": ["K183021"]},
+        {"priority": 6, "test": "EMI/EMC ICD pacemaker interference", "standard": "IEC 60601-1-2", "rationale": "Required for active devices.", "estimated_weeks": 3, "sources": ["K213291","K221847"]},
+        {"priority": 7, "test": "Software IEC 62304 and Cybersecurity", "standard": "IEC 62304 / FDA Cybersecurity", "rationale": "Required for software-driven systems.", "estimated_weeks": 8, "sources": ["K213291","K201823"]},
+        {"priority": 8, "test": "Ex vivo lesion characterization", "standard": "Internal porcine model", "rationale": "Transmural lesion and esophageal safety for PFA.", "estimated_weeks": 4, "sources": ["K213291"]},
+    ]
 
+    selected_set = set(k_numbers)
+    filtered_targets = [t for t in ALL_TARGETS if t["source_k_number"] in selected_set or t["source_k_number"] == "All"]
+    filtered_tests = [t for t in ALL_TESTS if any(s in selected_set for s in t["sources"])]
+
+    selected_meta = {k: DEVICE_META[k] for k in k_numbers if k in DEVICE_META}
+    has_pfa = any(m["energy"] == "PFA" for m in selected_meta.values())
+    has_rf = any(m["energy"] == "RF" for m in selected_meta.values())
+    has_software = any(m["has_software"] for m in selected_meta.values())
+    has_cf_device = any(m["has_cf"] for m in selected_meta.values())
+
+    iu_priority = ["K192516", "K221847", "K213291", "K201823", "K183021"]
+    iu_pred = next((k for k in iu_priority if k in selected_set), k_numbers[0])
+    tc_preds = [k for k in k_numbers if k != iu_pred][:2]
+
+    fastest = min((DEVICE_META[k]["review_days"] for k in k_numbers if k in DEVICE_META), default=141)
+    slowest = max((DEVICE_META[k]["review_days"] for k in k_numbers if k in DEVICE_META), default=171)
+
+    risk_factors = ["FDA AI request on novel design features (+30-45 days)"]
+    if has_pfa:
+        risk_factors.append("Clinical data required for PFA energy (+6-18 months)")
+    if has_software:
+        risk_factors += ["IEC 62304 Class C software review (+3-6 weeks)", "Cybersecurity review (+2-4 weeks)"]
+
+    risks = []
+    if has_pfa and has_rf:
+        risks.append({"risk": "Energy modality mismatch between selected predicates", "likelihood": "High", "mitigation_strategy": "Use RF predicate for intended use only; PFA predicate for technology class reference only"})
+    if has_software:
+        risks.append({"risk": "IEC 62304 Class C software documentation required", "likelihood": "High", "mitigation_strategy": "Begin SDLC documentation at architecture phase"})
+    if has_cf_device:
+        risks.append({"risk": "Contact force accuracy below +-1g benchmark", "likelihood": "Medium", "mitigation_strategy": "Design to +-1g target with manufacturing margin"})
+    risks.append({"risk": "FDA AI request on design differences vs. predicate", "likelihood": "Medium", "mitigation_strategy": "Pre-submit Q-Sub to align on key differences before 510(k)"})
+
+    qsubs = [{"question": "Is the proposed predicate strategy (" + iu_pred + " for intended use) acceptable?", "why_important": "Confirming predicate before submission avoids major rework", "precedent": "Standard Q-Sub topic for split predicate strategies"}]
+    if has_pfa:
+        qsubs.append({"question": "Is clinical data required for PFA energy given selected predicates?", "why_important": "Clinical data adds 18-24 months", "precedent": "K213291 required 3 clinical studies"})
+    if has_software:
+        qsubs.append({"question": "What IEC 62304 software classification applies?", "why_important": "Class C requires full SDLC; misclassification causes AI requests", "precedent": "K201823 and K213291 required Class C"})
+    if not has_pfa and not has_software:
+        qsubs.append({"question": "Is bench-only testing sufficient for design differences from selected predicates?", "why_important": "Clinical data adds 18-24 months", "precedent": "K183021 and K221847 cleared bench-only"})
+
+    guardrails = [
+        {"constraint": "Biocompatibility testing must start at design freeze", "reason": "12-week lead time on critical path", "flexibility": "None"},
+        {"constraint": "Intended use must match " + iu_pred + " exactly", "reason": "Indication expansion triggers clinical IDE", "flexibility": "None for first 510(k)"},
+    ]
+    if has_cf_device:
+        guardrails.append({"constraint": "Contact force accuracy must be +-1g or better", "reason": "Predicate sets this as performance floor", "flexibility": "Low"})
+    if has_software:
+        guardrails.append({"constraint": "Begin IEC 62304 SDLC at architecture phase", "reason": "Class C package takes 6-9 months", "flexibility": "None"})
+    if has_pfa:
+        guardrails.append({"constraint": "Clinical IDE required before PFA 510(k)", "reason": "K213291 established FDA expectation for clinical data", "flexibility": "None"})
+
+    strategy_text = ("Based on selected predicates (" + ", ".join(k_numbers) + "): use " +
+        iu_pred + " for intended use" +
+        (" and " + ", ".join(tc_preds) + " for tech char" if tc_preds else "") + ". " +
+        ("Clinical data required for PFA energy." if has_pfa else
+         "Bench-only path available if indication matches exactly." if has_rf else
+         "Software documentation (IEC 62304) is the critical path item."))
+
+    return {
+        "predicate_selection_recommendation": {
+            "recommended_predicates": k_numbers,
+            "strategy": "split" if len(k_numbers) > 1 else "single",
+            "intended_use_predicate": iu_pred,
+            "tech_char_predicate": tc_preds,
+            "rationale": strategy_text
+        },
+        "performance_targets": filtered_targets,
+        "critical_test_list": filtered_tests,
+        "regulatory_risks": risks,
+        "timeline_estimate": {"optimistic_days": fastest - 10, "realistic_days": slowest + 30, "risk_factors_that_extend": risk_factors},
+        "q_submission_topics": qsubs,
+        "design_guardrails": guardrails
+    }
 
 def match_new_device(device_description: str, api_key: str = None, use_demo: bool = True) -> dict:
     if use_demo or not api_key:
         return DEMO_MATCH
     return DEMO_MATCH
+
+
+def match_new_device_dynamic(device_description: str, api_key: str = None, use_demo: bool = True) -> dict:
+    desc = device_description.lower()
+    is_pfa = "pulsed field" in desc or "pfa" in desc
+    is_diagnostic = "diagnostic only" in desc or ("mapping catheter" in desc and "ablation" not in desc)
+    is_mapping_system = "mapping system" in desc
+    is_rf = not is_pfa and not is_diagnostic and not is_mapping_system
+    has_persistent = "persistent" in desc
+    has_paf = "paroxysmal" in desc or "paf" in desc or (not has_persistent and not is_diagnostic)
+    has_cf = "contact force" in desc
+    has_multi = "multi-electrode" in desc or "grid" in desc or "array" in desc
+    has_omnipolar = "omnipolar" in desc
+    has_mapping = "integrated mapping" in desc or is_mapping_system
+
+    scores = []
+
+    iu_192 = 9 if is_rf and (has_paf or has_persistent) else (5 if is_rf else 3)
+    tc_192 = 8 if has_cf else (6 if is_rf else 3)
+    scores.append({"k_number": "K192516", "device_name": "THERMOCOOL SMARTTOUCH SF",
+        "intended_use_match": iu_192, "tech_char_match": tc_192,
+        "overall_fit": round(iu_192*0.5 + tc_192*0.5, 1),
+        "strengths": (["Broadest AF indication", "RF ablation — same energy"] if is_rf else ["Persistent AF precedent"])
+                    + (["Contact force precedent"] if has_cf else []),
+        "gaps": (["Energy modality mismatch — PFA vs RF"] if is_pfa else [])
+              + (["No CF sensing to reference"] if not has_cf else []),
+        "recommended_role": "Primary" if is_rf and iu_192 >= 7 else ("Split-IntendedUse" if iu_192 >= 5 else "Not Recommended")})
+
+    iu_221 = 8 if is_rf and has_paf else (5 if is_rf else 2)
+    tc_221 = 9 if has_cf and is_rf else (7 if has_multi else 4)
+    scores.append({"k_number": "K221847", "device_name": "THERMOCOOL SMARTTOUCH SF-5D",
+        "intended_use_match": iu_221, "tech_char_match": tc_221,
+        "overall_fit": round(iu_221*0.4 + tc_221*0.6, 1),
+        "strengths": ["Most recent clearance"] + (["CF ±1g benchmark"] if has_cf else []) + (["Multi-electrode precedent"] if has_multi else []),
+        "gaps": (["PAF-only — narrower indication"] if has_persistent else []) + (["Energy mismatch"] if is_pfa else []),
+        "recommended_role": "Split-TechChar" if tc_221 >= 7 else ("Supporting" if tc_221 >= 5 else "Not Recommended")})
+
+    iu_213 = 8 if is_pfa else (5 if has_persistent else 3)
+    tc_213 = 9 if is_pfa else 2
+    scores.append({"k_number": "K213291", "device_name": "FARAPULSE PFA System",
+        "intended_use_match": iu_213, "tech_char_match": tc_213,
+        "overall_fit": round(iu_213*0.5 + tc_213*0.5, 1),
+        "strengths": (["PFA technology class predicate", "Tissue selectivity precedent"] if is_pfa else ["Persistent AF indication"]),
+        "gaps": (["3 clinical studies required"] if is_pfa else ["Wrong energy modality for RF device", "Not recommended for RF"]),
+        "recommended_role": "Primary" if is_pfa else ("Not Recommended" if is_rf else "Supporting")})
+
+    iu_201 = 8 if is_mapping_system else (4 if has_mapping else 2)
+    tc_201 = 8 if is_mapping_system else (5 if has_mapping else 3)
+    scores.append({"k_number": "K201823", "device_name": "RHYTHMIA HDx Mapping System",
+        "intended_use_match": iu_201, "tech_char_match": tc_201,
+        "overall_fit": round(iu_201*0.5 + tc_201*0.5, 1),
+        "strengths": ["128-channel mapping precedent", "Software Class C package precedent"] if is_mapping_system else ["Software integration precedent"],
+        "gaps": [] if is_mapping_system else ["Different device type", "Diagnostic-only — no ablation support"],
+        "recommended_role": "Primary" if is_mapping_system else ("Supporting" if has_mapping else "Not Recommended")})
+
+    iu_183 = 8 if is_diagnostic else (4 if has_multi else 2)
+    tc_183 = 9 if has_multi or has_omnipolar else (5 if is_diagnostic else 3)
+    scores.append({"k_number": "K183021", "device_name": "ADVISOR HD Grid Catheter",
+        "intended_use_match": iu_183, "tech_char_match": tc_183,
+        "overall_fit": round(iu_183*0.4 + tc_183*0.6, 1),
+        "strengths": (["Grid array precedent", "Omnipolar precedent", "141-day fast review"] if is_diagnostic else ["Multi-electrode geometry precedent"] if has_multi else ["Electrode variation precedent"]),
+        "gaps": [] if is_diagnostic else ["Diagnostic-only — no ablation indication"],
+        "recommended_role": "Primary" if is_diagnostic else ("Split-TechChar" if has_multi or has_omnipolar else "Supporting")})
+
+    scores.sort(key=lambda x: x["overall_fit"], reverse=True)
+
+    if is_pfa:
+        strategy = "Use K213291 (FARAPULSE) as primary predicate. Budget for clinical IDE — FDA requires clinical data for PFA energy."
+        fastest = "K213291 + K192516 split. Expect 3 clinical studies and 180–240 day review. Start IDE planning now."
+        gaps = ["PFA requires clinical IDE — begin planning immediately", "Pulse generator needs IEC 62304 Class C software package", "Ex vivo esophageal safety testing required", "EMI testing with ICD/pacemakers required"]
+    elif is_mapping_system:
+        strategy = "Use K201823 (RHYTHMIA HDx) as primary. IEC 62304 Class C software is the critical path — start SDLC documentation at architecture phase."
+        fastest = "K201823 sole predicate. Bench-only if accuracy meets spec. 90–120 day review if software package complete."
+        gaps = ["IEC 62304 Class C — begin SDLC at architecture phase", "Cybersecurity penetration testing before submission", "Mapping accuracy methodology — pre-agree with FDA via Q-Sub"]
+    elif is_diagnostic:
+        strategy = "Use K183021 (ADVISOR HD Grid) as primary. Bench-only path — fastest device class to clear in EP."
+        fastest = "K183021 as sole predicate. Bench-only. 90–141 day review. No clinical IDE needed."
+        gaps = ["Electrode geometry differences need bench justification", "Biocompatibility ISO 10993-1 — start at design freeze (12 weeks)"]
+    else:
+        strategy = ("Split predicate: K192516 (intended use) + K221847 (CF tech char). Bench-only if indication matches exactly." if has_cf
+                   else "K192516 as primary predicate for RF ablation. Bench-only path available if indication matches predicate.")
+        fastest = ("K192516 + K221847 split, bench-only, indication limited to " + ("PAF + persistent AF" if has_persistent else "PAF") + ". Target 90–110 days." if has_cf
+                  else "K192516 sole predicate, bench-only, match indication exactly. 90–120 day target.")
+        gaps = ["Biocompatibility ISO 10993-1 — initiate at design freeze (12-week lead time)",
+                "Indication expansion beyond predicate triggers clinical IDE requirement",
+                "Any electrode geometry change needs bench data vs. predicate"] + (["CF accuracy must meet ±1g benchmark"] if has_cf else [])
+
+    return {"predicate_match_scores": scores, "strategy_recommendation": strategy, "key_gaps": gaps, "fastest_path": fastest}
