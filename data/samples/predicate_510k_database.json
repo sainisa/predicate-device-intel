@@ -1,0 +1,234 @@
+[
+  {
+    "k_number": "K221847",
+    "device_name": "THERMOCOOL SMARTTOUCH SF-5D Catheter",
+    "applicant": "Biosense Webster Inc.",
+    "date_received": "2022-04-15",
+    "decision_date": "2022-09-28",
+    "decision": "Substantially Equivalent",
+    "product_code": "DQX",
+    "regulation": "21 CFR 870.3800",
+    "device_class": "II",
+    "predicate_devices": ["K192516", "K173408"],
+    "indications_for_use": "The THERMOCOOL SMARTTOUCH SF-5D Catheter is indicated for cardiac electrophysiology mapping and radio-frequency (RF) ablation of drug refractory recurrent symptomatic paroxysmal atrial fibrillation (PAF) in patients who have failed or are not candidates for antiarrhythmic drug therapy.",
+    "substantial_equivalence_summary": "The THERMOCOOL SMARTTOUCH SF-5D Catheter has the same intended use and technological characteristics as the predicate device K192516 (THERMOCOOL SMARTTOUCH SF Catheter). The device uses the same contact force sensing technology, irrigated tip design, and RF energy delivery mechanism. The addition of a 5th diagnostic electrode does not raise new questions of safety and effectiveness.",
+    "technological_differences": [
+      "Addition of a 5th ring diagnostic electrode (SF-5D vs SF)",
+      "Modified distal shaft geometry to accommodate additional electrode",
+      "Updated electrode spacing: 4-4-4 mm (vs 2-5-2 mm in predicate)"
+    ],
+    "performance_testing": {
+      "bench_tests": [
+        {"test": "Electrical performance — contact force sensing accuracy", "standard": "Internal BSW TF-2210", "result": "Contact force accuracy ±1g across 0-200g range, meets spec"},
+        {"test": "RF power delivery and temperature monitoring", "standard": "IEC 60601-2-2", "result": "Power output within ±5% of set value; thermocouple accuracy ±1°C"},
+        {"test": "Irrigation flow rate accuracy", "standard": "Internal BSW IF-0042", "result": "Flow rate 2-30 mL/min, deviation <5%"},
+        {"test": "Deflection and torque", "standard": "Internal BSW DT-1187", "result": "Bidirectional deflection 180° ± 10°; torque transmission ratio >0.85"},
+        {"test": "Tensile strength — tip/shaft junction", "standard": "ASTM F2602", "result": "Pull force > 10 N without failure"},
+        {"test": "Electrode impedance", "standard": "Internal", "result": "All electrodes <200Ω; inter-electrode isolation >100kΩ"},
+        {"test": "Biocompatibility", "standard": "ISO 10993-1", "result": "Pass — cytotoxicity, sensitization, genotoxicity"},
+        {"test": "Sterilization validation", "standard": "ISO 11135", "result": "EO sterility assurance level 10⁻⁶"}
+      ],
+      "clinical_data": "Performance data from 47-patient clinical study (SMARTTOUCH SF-5D IDE). Primary endpoint: acute procedural success defined as bidirectional block at 3-month follow-up. Results: 89.4% success rate, comparable to predicate performance.",
+      "software_testing": "CARTO 3 system compatibility validated per IEC 62304; no new software safety classification changes."
+    },
+    "key_claims": [
+      "Contact force sensing range: 0–200g",
+      "RF power delivery: up to 50W",
+      "Irrigation: 2–30 mL/min saline",
+      "5-electrode diagnostic mapping capability",
+      "Compatible with CARTO 3 navigation system",
+      "Single-use, sterilized by ethylene oxide"
+    ],
+    "regulatory_strategy_notes": "Applicant leveraged traditional 510(k) pathway. Substantial equivalence established through split-predicate approach: intended use from K192516; technological characteristics partially from K173408 (electrode spacing precedent). No clinical study required — bench data sufficient given technological similarity.",
+    "specialty": "Electrophysiology",
+    "device_type": "Ablation Catheter",
+    "energy_modality": "RF",
+    "target_anatomy": "Left Atrium",
+    "indication": "Paroxysmal Atrial Fibrillation"
+  },
+  {
+    "k_number": "K213291",
+    "device_name": "FARAPULSE Pulsed Field Ablation System",
+    "applicant": "Farapulse Inc. (Boston Scientific)",
+    "date_received": "2021-07-08",
+    "decision_date": "2021-12-17",
+    "decision": "Substantially Equivalent",
+    "product_code": "DQX",
+    "regulation": "21 CFR 870.3800",
+    "device_class": "II",
+    "predicate_devices": ["K192516", "K201823"],
+    "indications_for_use": "The FARAPULSE Pulsed Field Ablation (PFA) System is indicated for cardiac electrophysiology mapping and ablation of drug refractory recurrent symptomatic persistent atrial fibrillation in patients who have failed antiarrhythmic drug therapy.",
+    "substantial_equivalence_summary": "The FARAPULSE PFA System has the same intended use as predicate K192516. While PFA uses a different energy modality than RF ablation, the applicant demonstrated through bench testing and clinical data that the device achieves the same intended effect (creation of cardiac lesions for AF treatment) without raising new safety questions. FDA accepted the alternative energy modality as not raising new questions per the de novo precedent established in DEN200054.",
+    "technological_differences": [
+      "Pulsed field energy delivery (irreversible electroporation) vs. RF thermal energy",
+      "Pentaspline basket catheter geometry vs. single-tip catheter",
+      "Non-thermal ablation mechanism — tissue selectivity for cardiomyocytes",
+      "Custom pulse generator (FARAWAVE Generator) vs. standard RF generator",
+      "No irrigation required — eliminates fluid management consideration"
+    ],
+    "performance_testing": {
+      "bench_tests": [
+        {"test": "Pulse delivery accuracy and consistency", "standard": "Internal FP-ELEC-001", "result": "Pulse energy within ±3% of target; waveform shape within specification"},
+        {"test": "Electrode contact and tissue coupling", "standard": "Internal FP-MECH-004", "result": "All 10 electrodes achieve adequate tissue contact in cardiac anatomical models"},
+        {"test": "Lesion characterization — ex vivo porcine hearts", "standard": "Internal FP-BIO-009", "result": "Transmural lesions confirmed in >95% of sites; no unintended esophageal injury in 3D model"},
+        {"test": "Electrical isolation — catheter shaft", "standard": "IEC 60601-1", "result": "Leakage current <10µA; dielectric withstand 5kV"},
+        {"test": "Mechanical integrity — basket deployment/retraction", "standard": "Internal FP-MECH-012", "result": "1000 deployment cycles without structural failure"},
+        {"test": "Biocompatibility", "standard": "ISO 10993-1", "result": "Pass — all endpoints including hemolysis and complement activation"},
+        {"test": "EMI/EMC", "standard": "IEC 60601-1-2", "result": "No interference with ICDs or pacemakers at clinical operating distances"},
+        {"test": "Sterilization", "standard": "ISO 11135", "result": "EO sterilization validated; SAL 10⁻⁶"}
+      ],
+      "clinical_data": "IMPULSE, PEFCAT, and MANIFEST-PF studies: n=473 patients, 12-month freedom from arrhythmia 78.5%. Phrenic nerve injury rate 0.6%, significantly lower than thermal ablation historical rates (~3%). No esophageal injury events.",
+      "software_testing": "FARAWAVE Generator software classified as Class B per IEC 62304. Full SDLC documentation provided. Cybersecurity per FDA guidance (2018)."
+    },
+    "key_claims": [
+      "Pulsed field (irreversible electroporation) energy delivery",
+      "Cardiomyocyte tissue selectivity — spares esophagus, phrenic nerve",
+      "Pentaspline basket: 5 splines × 2 electrodes = 10 contact points",
+      "Single energy application per pulmonary vein (vs. point-by-point RF)",
+      "Procedure time reduction vs. RF: ~40 min average",
+      "Compatible with major electroanatomic mapping systems"
+    ],
+    "regulatory_strategy_notes": "Complex 510(k) — alternative energy modality required extensive safety justification. FDA requested additional information (AI) twice during review. Key regulatory strategy: leveraged DEN200054 de novo as predicate for PFA technology class; RF ablation predicate for intended use. Clinical data from three studies submitted voluntarily to support safety profile of new energy modality.",
+    "specialty": "Electrophysiology",
+    "device_type": "Ablation System",
+    "energy_modality": "Pulsed Field (PFA/IRE)",
+    "target_anatomy": "Pulmonary Veins / Left Atrium",
+    "indication": "Persistent Atrial Fibrillation"
+  },
+  {
+    "k_number": "K192516",
+    "device_name": "THERMOCOOL SMARTTOUCH SF Catheter",
+    "applicant": "Biosense Webster Inc.",
+    "date_received": "2019-03-22",
+    "decision_date": "2019-08-14",
+    "decision": "Substantially Equivalent",
+    "product_code": "DQX",
+    "regulation": "21 CFR 870.3800",
+    "device_class": "II",
+    "predicate_devices": ["K143784", "K161203"],
+    "indications_for_use": "The THERMOCOOL SMARTTOUCH SF Catheter is indicated for cardiac electrophysiology mapping and RF ablation of drug refractory recurrent symptomatic paroxysmal and persistent atrial fibrillation.",
+    "substantial_equivalence_summary": "Same intended use as predicate K143784. The surround flow (SF) irrigation pattern and contact force sensing are present in the predicate; this submission adds expanded AF indication (persistent, in addition to paroxysmal). Clinical data demonstrates safety and effectiveness for the expanded indication.",
+    "technological_differences": [
+      "Expanded indication: persistent AF added to existing PAF indication",
+      "Surround flow irrigation pattern (unchanged from predicate)",
+      "Contact force range extended: 0–200g (vs. 0–150g in predicate)"
+    ],
+    "performance_testing": {
+      "bench_tests": [
+        {"test": "Contact force accuracy", "standard": "Internal BSW TF-2210", "result": "±1g across extended 0–200g range"},
+        {"test": "Irrigation uniformity — surround flow pattern", "standard": "Internal BSW IF-0038", "result": "Flow uniformity coefficient >0.92 across all irrigation ports"},
+        {"test": "RF lesion depth — tissue phantom", "standard": "Internal BSW LD-0051", "result": "Lesion depth 4.2 ± 0.8mm at 30W/30s; no steam pop at <15mL/min irrigation"},
+        {"test": "Electrical performance", "standard": "IEC 60601-2-2", "result": "All parameters within specification"},
+        {"test": "Fatigue — 1000-cycle deflection", "standard": "Internal", "result": "No structural failure; deflection repeatability ±5°"}
+      ],
+      "clinical_data": "PRECEPT IDE study: n=333 persistent AF patients. 12-month freedom from atrial arrhythmia: 55.1% (single procedure). Serious adverse events: cardiac tamponade 1.5%, thromboembolic events 0.6%.",
+      "software_testing": "No new software submitted. CARTO 3 compatibility confirmed through regression testing."
+    },
+    "key_claims": [
+      "Contact force sensing: 0–200g",
+      "Surround flow irrigation: 3–30 mL/min",
+      "Bidirectional deflection: 180°",
+      "Thermocouple temperature monitoring",
+      "CARTO 3 compatible",
+      "Dual PAF and persistent AF indication"
+    ],
+    "regulatory_strategy_notes": "Traditional 510(k). Indication expansion required clinical IDE study (PRECEPT). Predicate split: technological characteristics from K143784; indication precedent built from prior persistent AF clearances. Review time extended due to clinical data review — 145 days total.",
+    "specialty": "Electrophysiology",
+    "device_type": "Ablation Catheter",
+    "energy_modality": "RF",
+    "target_anatomy": "Left Atrium / Pulmonary Veins",
+    "indication": "Paroxysmal and Persistent Atrial Fibrillation"
+  },
+  {
+    "k_number": "K201823",
+    "device_name": "RHYTHMIA HDx Mapping System",
+    "applicant": "Boston Scientific Corporation",
+    "date_received": "2020-05-11",
+    "decision_date": "2020-10-29",
+    "decision": "Substantially Equivalent",
+    "product_code": "MRY",
+    "regulation": "21 CFR 870.3800",
+    "device_class": "II",
+    "predicate_devices": ["K171924", "K183021"],
+    "indications_for_use": "The RHYTHMIA HDx Mapping System is intended for use with compatible EP catheters to record, display, and analyze intracardiac electrograms and to create electroanatomical maps of the heart to aid in the diagnosis and treatment of cardiac arrhythmias.",
+    "substantial_equivalence_summary": "The RHYTHMIA HDx has the same intended use as predicate K171924 (RHYTHMIA Mapping System). Technological differences — increased channel count (128 vs 64 simultaneous channels), improved map resolution algorithm (HDx), and updated hardware platform — do not raise new safety questions. Performance testing demonstrates equivalent or superior mapping accuracy.",
+    "technological_differences": [
+      "128 simultaneous recording channels (vs. 64 in predicate)",
+      "HDx algorithm: automatic annotation and noise rejection upgrade",
+      "Updated workstation hardware — processor speed 4x improvement",
+      "New ORION mini catheter compatibility (8F vs 9F predicate)",
+      "Real-time respiratory gating — reduces map position error"
+    ],
+    "performance_testing": {
+      "bench_tests": [
+        {"test": "Mapping accuracy — cardiac phantom", "standard": "Internal BSC MAP-001", "result": "Position accuracy <0.5mm RMS in 3D cardiac phantom; superior to predicate (0.8mm RMS)"},
+        {"test": "Signal fidelity — 128 channel simultaneous acquisition", "standard": "Internal BSC SIG-042", "result": "SNR >40dB across all channels; crosstalk <-60dB between adjacent channels"},
+        {"test": "Annotation accuracy — HDx algorithm", "standard": "Internal BSC ALG-017", "result": "Automatic annotation agreement with expert manual: 94.2%; false positive rate <3%"},
+        {"test": "EMI immunity", "standard": "IEC 60601-1-2", "result": "No functional degradation in standard EP lab environment"},
+        {"test": "Display latency", "standard": "Internal", "result": "Map update latency <200ms; electrogram display latency <50ms"},
+        {"test": "Cybersecurity", "standard": "FDA Cybersecurity Guidance 2018", "result": "Penetration testing completed; no critical vulnerabilities; data encryption AES-256"}
+      ],
+      "clinical_data": "No clinical study required. Mapping system performance established by bench testing per FDA-accepted methodology for electroanatomical mapping systems.",
+      "software_testing": "Software classified IEC 62304 Class C (patient safety risk). Full SDLC documentation including SRS, SDS, unit testing, integration testing, system testing. 847 requirements traced. Regression testing 100% pass rate."
+    },
+    "key_claims": [
+      "128 simultaneous electrogram channels",
+      "Map resolution: <1mm point spacing capability",
+      "HDx automatic annotation algorithm",
+      "Compatible with ORION, INTELLAMAP ORION catheters",
+      "Real-time respiratory and cardiac gating",
+      "DICOM import for anatomical overlay"
+    ],
+    "regulatory_strategy_notes": "Traditional 510(k). Software-heavy submission — IEC 62304 Class C required full SDLC documentation package. Cybersecurity review added 3 weeks to review timeline per FDA AI request. Mapping accuracy methodology pre-agreed with FDA in Q-submission (Q190982) prior to submission — accelerated review significantly.",
+    "specialty": "Electrophysiology",
+    "device_type": "Mapping System",
+    "energy_modality": "N/A (Diagnostic)",
+    "target_anatomy": "All cardiac chambers",
+    "indication": "Cardiac Arrhythmia Mapping"
+  },
+  {
+    "k_number": "K183021",
+    "device_name": "ADVISOR HD GRID Mapping Catheter",
+    "applicant": "Abbott Medical Inc.",
+    "date_received": "2018-06-14",
+    "decision_date": "2018-11-02",
+    "decision": "Substantially Equivalent",
+    "product_code": "DQX",
+    "regulation": "21 CFR 870.3800",
+    "device_class": "II",
+    "predicate_devices": ["K152341", "K171924"],
+    "indications_for_use": "The ADVISOR HD Grid Mapping Catheter SE is intended for electrophysiological mapping of the heart. It is used to record electrograms and to pace the heart for diagnostic purposes.",
+    "substantial_equivalence_summary": "Same intended use as predicate K152341 (diagnostic mapping catheter). The grid electrode configuration (4×4 array vs. linear array in predicate) represents a technological difference that does not raise new safety questions, as grid electrode arrays have established clinical precedent and the electrical safety profile is equivalent.",
+    "technological_differences": [
+      "4×4 grid electrode array (16 electrodes) vs. linear array (10 electrodes) in predicate",
+      "Omnipolar technology: simultaneous omnidirectional electrogram acquisition",
+      "Flexible grid structure — conforms to cardiac anatomy",
+      "Electrode spacing: 3mm center-to-center in grid configuration"
+    ],
+    "performance_testing": {
+      "bench_tests": [
+        {"test": "Omnipolar electrogram accuracy", "standard": "Internal ABT OM-014", "result": "Omnipolar signal amplitude within 10% of unipolar reference across 360° rotation"},
+        {"test": "Grid mechanical integrity", "standard": "ASTM F2602", "result": "No fracture or electrode separation after 500 deflection cycles"},
+        {"test": "Electrode electrical isolation", "standard": "Internal", "result": "Inter-electrode impedance >100kΩ; no shorting observed"},
+        {"test": "Biocompatibility", "standard": "ISO 10993-1", "result": "Pass all endpoints"},
+        {"test": "Fluoroscopic visibility", "standard": "Internal ABT FV-003", "result": "All 16 electrodes visible under standard fluoroscopy settings"}
+      ],
+      "clinical_data": "No clinical study submitted. Bench performance data sufficient per FDA guidance for diagnostic mapping catheters.",
+      "software_testing": "EnSite Precision system compatibility validated. No new software submission required — existing cleared software used without modification."
+    },
+    "key_claims": [
+      "16-electrode 4×4 grid array",
+      "Omnipolar electrogram technology",
+      "3mm inter-electrode spacing",
+      "Bidirectional steering",
+      "Compatible with EnSite Precision Cardiac Mapping System",
+      "Diagnostic use — no ablation capability"
+    ],
+    "regulatory_strategy_notes": "Traditional 510(k). Novel grid geometry justified through split predicate — electrode array from K152341, omnipolar signal processing from K171924. FDA did not request clinical data — diagnostic catheters typically clear on bench data alone. Fast review: 141 days.",
+    "specialty": "Electrophysiology",
+    "device_type": "Diagnostic Mapping Catheter",
+    "energy_modality": "N/A (Diagnostic)",
+    "target_anatomy": "All cardiac chambers",
+    "indication": "Cardiac Electrophysiology Mapping"
+  }
+]
